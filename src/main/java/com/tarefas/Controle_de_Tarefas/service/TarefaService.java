@@ -34,6 +34,10 @@ public class TarefaService {
     public void deletar(Long id) {
         tarefaRepository.deleteById(id);
     }
+    
+    public List<Tarefa> listarPorStatus(Boolean concluida) {
+        return tarefaRepository.findByConcluida(concluida);
+    }
 
     public Tarefa atualizar(Long id, Tarefa novaTarefa) {
         return tarefaRepository.findById(id).map(tarefa -> {
@@ -43,4 +47,5 @@ public class TarefaService {
             return tarefaRepository.save(tarefa);
         }).orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
     }
+    
 }
