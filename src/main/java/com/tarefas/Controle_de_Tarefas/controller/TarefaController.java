@@ -5,6 +5,9 @@ import com.tarefas.Controle_de_Tarefas.model.Tarefa;
 import com.tarefas.Controle_de_Tarefas.model.Usuario;
 import com.tarefas.Controle_de_Tarefas.service.TarefaService;
 import com.tarefas.Controle_de_Tarefas.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +25,14 @@ public class TarefaController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // POST /tarefas
     @PostMapping
+    @Operation(summary = "Criar uma nova tarefa")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Tarefa criada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário não encontrado")
+    })
     public ResponseEntity<?> criar(@RequestBody @Valid TarefaDTO dto) {
-    	Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
+        Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
 
         Tarefa tarefa = new Tarefa();
         tarefa.setDescricao(dto.getDescricao());
@@ -37,18 +44,25 @@ public class TarefaController {
         return ResponseEntity.ok(salva);
     }
 
-    // GET
     @GetMapping
+    @Operation(summary = "Listar tarefas por status de conclusão")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Tarefas listadas com sucesso")
+    })
     public ResponseEntity<List<Tarefa>> listarPorStatus(@RequestParam Boolean concluida) {
         List<Tarefa> lista = tarefaService.listarPorStatus(concluida);
         return ResponseEntity.ok(lista);
     }
 
-    // PUT /tarefas/{id}
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar uma tarefa existente")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Tarefa atualizada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário não encontrado")
+    })
     public ResponseEntity<Tarefa> atualizar(@PathVariable Long id, @RequestBody @Valid TarefaDTO dto) {
-    	Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
-    	
+        Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
+
         Tarefa nova = new Tarefa();
         nova.setDescricao(dto.getDescricao());
         nova.setDataEntrega(dto.getDataEntrega());
@@ -59,8 +73,12 @@ public class TarefaController {
         return ResponseEntity.ok(atualizada);
     }
 
-    // DELETE /tarefas/{id}
     @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar uma tarefa")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Tarefa deletada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
+    })
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         tarefaService.deletar(id);
         return ResponseEntity.noContent().build();
