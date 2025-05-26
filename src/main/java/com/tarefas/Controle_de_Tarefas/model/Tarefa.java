@@ -59,7 +59,7 @@ public class Tarefa {
 
 
 
-	public boolean isConcluida() {
+	public boolean getConcluida() {
 		return concluida;
 	}
 

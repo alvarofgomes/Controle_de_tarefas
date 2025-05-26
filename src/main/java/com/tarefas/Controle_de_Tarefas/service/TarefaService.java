@@ -45,7 +45,7 @@ public class TarefaService {
         return tarefaRepository.findById(id).map(tarefa -> {
             tarefa.setDescricao(novaTarefa.getDescricao());
             tarefa.setDataEntrega(novaTarefa.getDataEntrega());
-            tarefa.setConcluida(novaTarefa.isConcluida());
+            tarefa.setConcluida(novaTarefa.getConcluida());
             return tarefaRepository.save(tarefa);
         }).orElseThrow(() -> new ResourceNotFoundException("Tarefa com ID " + id + " não encontrada"));
     }
