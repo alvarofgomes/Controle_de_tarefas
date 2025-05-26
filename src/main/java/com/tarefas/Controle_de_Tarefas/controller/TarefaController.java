@@ -25,8 +25,7 @@ public class TarefaController {
     // POST /tarefas
     @PostMapping
     public ResponseEntity<?> criar(@RequestBody @Valid TarefaDTO dto) {
-        Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    	Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
 
         Tarefa tarefa = new Tarefa();
         tarefa.setDescricao(dto.getDescricao());
@@ -48,9 +47,8 @@ public class TarefaController {
     // PUT /tarefas/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Tarefa> atualizar(@PathVariable Long id, @RequestBody @Valid TarefaDTO dto) {
-        Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
+    	Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
+    	
         Tarefa nova = new Tarefa();
         nova.setDescricao(dto.getDescricao());
         nova.setDataEntrega(dto.getDataEntrega());

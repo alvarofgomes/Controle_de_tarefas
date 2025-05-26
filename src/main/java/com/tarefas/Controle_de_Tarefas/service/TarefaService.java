@@ -1,12 +1,13 @@
 package com.tarefas.Controle_de_Tarefas.service;
 
-import com.tarefas.Controle_de_Tarefas.model.Tarefa;
-import com.tarefas.Controle_de_Tarefas.repository.TarefaRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.tarefas.Controle_de_Tarefas.exception.ResourceNotFoundException;
+import com.tarefas.Controle_de_Tarefas.model.Tarefa;
+import com.tarefas.Controle_de_Tarefas.repository.TarefaRepository;
 
 @Service
 public class TarefaService {
@@ -17,7 +18,7 @@ public class TarefaService {
     public Tarefa salvar(Tarefa tarefa) {
         // Exemplo de regra de negócio não salvar tarefas sem descrição
         if (tarefa.getDescricao() == null || tarefa.getDescricao().isBlank()) {
-            throw new RuntimeException("A descrição da tarefa é obrigatória.");
+        	throw new IllegalArgumentException("A descrição da tarefa é obrigatória.");
         }
 
         return tarefaRepository.save(tarefa);
@@ -27,8 +28,9 @@ public class TarefaService {
         return tarefaRepository.findByUsuarioId(usuarioId);
     }
 
-    public Optional<Tarefa> buscarPorId(Long id) {
-        return tarefaRepository.findById(id);
+    public Tarefa buscarPorId(Long id) {
+        return tarefaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tarefa com ID " + id + " não encontrada"));
     }
 
     public void deletar(Long id) {
@@ -45,7 +47,7 @@ public class TarefaService {
             tarefa.setDataEntrega(novaTarefa.getDataEntrega());
             tarefa.setConcluida(novaTarefa.isConcluida());
             return tarefaRepository.save(tarefa);
-        }).orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+        }).orElseThrow(() -> new ResourceNotFoundException("Tarefa com ID " + id + " não encontrada"));
     }
     
 }
