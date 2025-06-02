@@ -9,6 +9,9 @@ import com.tarefas.Controle_de_Tarefas.exception.ResourceNotFoundException;
 import com.tarefas.Controle_de_Tarefas.model.Tarefa;
 import com.tarefas.Controle_de_Tarefas.repository.TarefaRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class TarefaService {
 
@@ -16,7 +19,8 @@ public class TarefaService {
     private TarefaRepository tarefaRepository;
 
     public Tarefa salvar(Tarefa tarefa) {
-        // Exemplo de regra de negócio não salvar tarefas sem descrição
+    	
+    	log.info("Salvando nova tarefa para usuário ID: {}",tarefa.getUsuario().getId());
         if (tarefa.getDescricao() == null || tarefa.getDescricao().isBlank()) {
         	throw new IllegalArgumentException("A descrição da tarefa é obrigatória.");
         }
@@ -29,6 +33,7 @@ public class TarefaService {
     }
 
     public Tarefa buscarPorId(Long id) {
+    	log.debug("Buscando tarefa por ID: {}", id);
         return tarefaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarefa com ID " + id + " não encontrada"));
     }

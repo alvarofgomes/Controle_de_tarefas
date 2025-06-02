@@ -1,20 +1,32 @@
 package com.tarefas.Controle_de_Tarefas.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.tarefas.Controle_de_Tarefas.dto.TarefaDTO;
 import com.tarefas.Controle_de_Tarefas.model.Tarefa;
 import com.tarefas.Controle_de_Tarefas.model.Usuario;
 import com.tarefas.Controle_de_Tarefas.service.TarefaService;
 import com.tarefas.Controle_de_Tarefas.service.UsuarioService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/tarefas")
 public class TarefaController {
@@ -32,6 +44,9 @@ public class TarefaController {
         @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário não encontrado")
     })
     public ResponseEntity<?> criar(@RequestBody @Valid TarefaDTO dto) {
+    	
+    	log.info("Iniciando criação de tarefa para usuário ID: {}", dto.getUsuarioId());
+    	
         Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
 
         Tarefa tarefa = new Tarefa();
@@ -41,6 +56,9 @@ public class TarefaController {
         tarefa.setUsuario(usuario);
 
         Tarefa salva = tarefaService.salvar(tarefa);
+        
+        log.info("Tarefa criada com sucesso - Descrição: {}", salva.getDescricao());
+        
         return ResponseEntity.ok(salva);
     }
 
@@ -61,6 +79,8 @@ public class TarefaController {
         @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário não encontrado")
     })
     public ResponseEntity<Tarefa> atualizar(@PathVariable Long id, @RequestBody @Valid TarefaDTO dto) {
+    	
+    	log.info("Criando uma tarefa para usuário: {}", dto.getUsuarioId());
         Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
 
         Tarefa nova = new Tarefa();
