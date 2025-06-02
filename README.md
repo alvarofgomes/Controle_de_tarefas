@@ -53,12 +53,12 @@ API RESTful para gerenciamento de tarefas desenvolvida com **Spring Boot**, perm
 
 | Nome             | Matrícula | Função Principal     |
 |------------------|-----------|----------------------|
-| Alisson Santos   | 01633244  | Backend/API          |
-| Álvaro Gomes     | 01704806  | Banco de Dados       |
+| Alisson Santos   | 01633244  | Banco de Dados       |
+| Alvaro Gomes     | 01704806  | Backend/API          |
 | Eduardo Melo     | 01706118  | Documentação         |
 | Kauan Alves      | 01710611  | Validações           |
-| Ítalo Guilherme  | 01678558  | Testes               |
-| Wesley José      | 01709983  | Coordenação          |
+| Ítalo Guilherme  | 01678558  | Coordenação          |
+| Wesley José      | 01709983  | Testes               |
 
 ---
 
